@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <!-- These are the colors from the sdk wrapper,
+    overriding these this would change the colors shown inside the sdk.
+    Make sure that the names match. -->
+    <color name="black">#FFFFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="translucent_black">#C3000000</color>
+    <color name="white">#FF000000</color>
+    <color name="gray">#E1E2E8</color>
+    <color name="blue">#FF00FF</color>
+    <color name="dark_gray">#1B181F</color>
+    <color name="color_primary">#FFFF00</color>
+    <color name="color_secondary">#00FFFF</color>
+    <color name="color_gray_200">#EEEFF3</color>
+    <color name="connection_green">#00FF00</color>
+    <color name="connection_gray">@color/color_secondary</color>
+    <color name="warning">#FF0000</color>
+    <color name="warning_red">#FF3333</color>
+
+    <!-- Progress view color -->
+    <color name="loading_view_fill">@color/color_primary</color>
+    <!-- The background color for button of type filled -->
+    <color name="filled_button_background">@color/color_primary</color>
+    <!-- The text color for button of type filled -->
+    <color name="filled_button_text">@color/white</color>
+    <!-- Border color for button of type bordered -->
+    <color name="bordered_button_border">@color/gray</color>
+    <!-- Background color for button of type bordered -->
+    <color name="bordered_button_background">@color/white</color>
+    <!-- Text color for button of type bordered -->
+    <color name="bordered_button_text">@color/color_primary</color>
+    <!-- Background color for highlighted text (hints) -->
+    <color name="highlighted_background">@color/warning</color>
+    <!-- Text color for highlighted text (hints) -->
+    <color name="highlighted_text">@color/white</color>
+    <!-- Default text color (hints) -->
+    <color name="default_text">@color/black</color>
+    <!-- Title label text color -->
+    <color name="title_label">@color/color_primary</color>
+    <!-- Subtitle label text color -->
+    <color name="subtitle_label">@color/color_secondary</color>
+    <!-- Reader name text color -->
+    <color name="reader_name">@color/dark_gray</color>
+    <!-- Reader status text color -->
+    <color name="reader_status_label">@color/color_secondary</color>
+    <!-- Reader name label text color (used in lists) -->
+    <color name="reader_name_label">@color/dark_gray</color>
+    <!-- Reader status connected icon color -->
+    <color name="reader_status_connected_icon">@color/connection_green</color>
+    <!-- Reader status disconnected icon color -->
+    <color name="reader_status_not_connected_icon">@color/connection_gray</color>
+    <!-- Reader list item background color -->
+    <color name="reader_cell_background">#EEEFF3</color>
+    <!-- Switch enabled color -->
+    <color name="switch_enabled">@color/connection_green</color>
+    <!-- Switch disabled color -->
+    <color name="switch_disabled">@color/color_secondary</color>
+    <!-- Tip value text color -->
+    <color name="tip_label">@color/color_primary</color>
+    <!-- Edit text info label color -->
+    <color name="info_label">@color/dark_gray</color>
+    <!-- Remove reader button border color -->
+    <color name="remove_reader_border">@color/warning_red</color>
+    <!-- Remove reader button text color -->
+    <color name="remove_reader_text">@color/warning_red</color>
+    <!-- Signature description text color -->
+    <color name="signature_description">@color/color_primary</color>
+    <!-- Confirm button enabled -->
+    <color name="confirm_button_enabled">@color/connection_green</color>
+</resources>
