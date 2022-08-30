@@ -4,9 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.clearent.idtech.android.wrapper.ClearentDataSource
+import com.clearent.idtech.android.wrapper.SDKWrapper
 import com.clearent.idtech.android.wrapper.ui.ClearentSDKUi
 import com.clearent.idtech.android.wrapper.ui.ClearentSDKUi.Companion.SDK_WRAPPER_RESULT_CODE
 import com.clearent.idtech.android.wrapper.ui.PaymentMethod
@@ -14,6 +15,7 @@ import com.clearent.idtech.android.wrapper.ui.SDKWrapperAction
 import com.clearent.idtech.android.wrapper.ui.SDKWrapperAction.*
 import com.clearent.idtech.android.wrapper.util.TAG
 import com.example.clearentsdkuidemo.databinding.ActivityMainBinding
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         // Check the result code of the action, if the activity returned RESULT_OK.
         if (result.resultCode == Activity.RESULT_OK)
-            Log.d(TAG, result.data?.getIntExtra(SDK_WRAPPER_RESULT_CODE, 0).toString())
+            Timber.d(TAG, result.data?.getIntExtra(SDK_WRAPPER_RESULT_CODE, 0).toString())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +42,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupSdkListener()
         setupClickListeners()
     }
+
+    private fun setupSdkListener() = SDKWrapper.setListener(ClearentDataSource)
 
     private fun setupClickListeners() {
         binding.apply {
@@ -129,5 +134,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
         activityLauncher.launch(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SDKWrapper.removeListener()
     }
 }
