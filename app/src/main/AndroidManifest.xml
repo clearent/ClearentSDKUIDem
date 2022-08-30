@@ -22,14 +22,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Declare the activity so we can launch it. -->
-        <activity
-            android:name="com.clearent.idtech.android.wrapper.ui.ClearentSDKUi"
-            android:exported="true"
-            android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.Transparent"
-            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

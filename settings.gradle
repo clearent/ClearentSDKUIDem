@@ -3,6 +3,14 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven {
+            url 'https://pkgs.dev.azure.com/xplortechnologies/_packaging/xplortechnologies/maven/v1'
+            name 'xplortechnologies'
+            credentials {
+                username XPLOR_AZURE_USERNAME
+                password XPLOR_AZURE_PASSWORD
+            }
+        }
     }
 }
 dependencyResolutionManagement {
@@ -10,6 +18,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url 'https://pkgs.dev.azure.com/xplortechnologies/_packaging/xplortechnologies/maven/v1'
+            name 'xplortechnologies'
+            credentials {
+                username XPLOR_AZURE_USERNAME
+                password XPLOR_AZURE_PASSWORD
+            }
+        }
     }
 }
 rootProject.name = "ClearentSDKUIDemo"
