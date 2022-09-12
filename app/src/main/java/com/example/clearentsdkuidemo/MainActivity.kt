@@ -7,12 +7,12 @@ import android.os.Parcelable
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.clearent.idtech.android.wrapper.ClearentDataSource
-import com.clearent.idtech.android.wrapper.SDKWrapper
-import com.clearent.idtech.android.wrapper.ui.ClearentSDKUi
-import com.clearent.idtech.android.wrapper.ui.ClearentSDKUi.Companion.SDK_WRAPPER_RESULT_CODE
+import com.clearent.idtech.android.wrapper.ClearentWrapper
+import com.clearent.idtech.android.wrapper.ui.ClearentSDKActivity.Companion.CLEARENT_RESULT_CODE
+import com.clearent.idtech.android.wrapper.ui.ClearentSDKActivity
 import com.clearent.idtech.android.wrapper.ui.PaymentMethod
-import com.clearent.idtech.android.wrapper.ui.SDKWrapperAction
-import com.clearent.idtech.android.wrapper.ui.SDKWrapperAction.*
+import com.clearent.idtech.android.wrapper.ui.ClearentAction
+import com.clearent.idtech.android.wrapper.ui.ClearentAction.*
 import com.clearent.idtech.android.wrapper.util.TAG
 import com.example.clearentsdkuidemo.databinding.ActivityMainBinding
 import timber.log.Timber
@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    // Check if we started an action with the ClearentSDKUi, it might take a while
+    // Check if we started an action with the ClearentSDKActivity, it might take a while
     // to start the activity and we don't want duplicate actions.
     private var transactionOngoing = false
 
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         // Check the result code of the action, if the activity returned RESULT_OK.
         if (result.resultCode == Activity.RESULT_OK)
-            Timber.d(TAG, result.data?.getIntExtra(SDK_WRAPPER_RESULT_CODE, 0).toString())
+            Timber.d(TAG, result.data?.getIntExtra(CLEARENT_RESULT_CODE, 0).toString())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setupClickListeners()
     }
 
-    private fun setupSdkListener() = SDKWrapper.setListener(ClearentDataSource)
+    private fun setupSdkListener() = ClearentWrapper.setListener(ClearentDataSource)
 
     private fun setupClickListeners() {
         binding.apply {
@@ -70,29 +70,27 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun startSdkActivityForResult(sdkWrapperAction: SDKWrapperAction) {
+    private fun startSdkActivityForResult(clearentAction: ClearentAction) {
         if (transactionOngoing)
             return
 
         transactionOngoing = true
 
-        // ↓ this could be a method inside the ClearentSDKUi
+        // Now we create an intent to start the ClearentSDKActivity
+        val intent = Intent(applicationContext, ClearentSDKActivity::class.java)
 
-        // Now we create an intent to start the ClearentSDKUi activity
-        val intent = Intent(applicationContext, ClearentSDKUi::class.java)
-
-        when (sdkWrapperAction) {
+        when (clearentAction) {
             // Pairing flow: we search for readers and then pair to one.
             is Pairing -> {
                 // Set the action for the ui
                 intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_KEY,
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_PAIR
+                    ClearentSDKActivity.CLEARENT_ACTION_KEY,
+                    ClearentSDKActivity.CLEARENT_ACTION_PAIR
                 )
                 // Set the hints option
                 intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_SHOW_HINTS,
-                    sdkWrapperAction.showHints
+                    ClearentSDKActivity.CLEARENT_SHOW_HINTS,
+                    clearentAction.showHints
                 )
             }
             // Devices List flow: we look at previously paired readers and select one to pair with.
@@ -100,36 +98,36 @@ class MainActivity : AppCompatActivity() {
             is DevicesList ->
                 // Set the action for the ui
                 intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_KEY,
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_DEVICES
+                    ClearentSDKActivity.CLEARENT_ACTION_KEY,
+                    ClearentSDKActivity.CLEARENT_ACTION_DEVICES
                 )
             // Transaction Flow: we start a transaction with an amount on a reader, or by manually
             // entering the card details.
             is Transaction -> {
                 // Set the action for the ui
                 intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_KEY,
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_TRANSACTION
+                    ClearentSDKActivity.CLEARENT_ACTION_KEY,
+                    ClearentSDKActivity.CLEARENT_ACTION_TRANSACTION
                 )
                 // Set the amount for the transaction
                 intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_AMOUNT_KEY,
-                    sdkWrapperAction.amount
+                    ClearentSDKActivity.CLEARENT_AMOUNT_KEY,
+                    clearentAction.amount
                 )
                 // Set the hints options in case we go through the pairing flow
                 intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_SHOW_HINTS,
-                    sdkWrapperAction.showHints
+                    ClearentSDKActivity.CLEARENT_SHOW_HINTS,
+                    clearentAction.showHints
                 )
                 // Set the signature option
                 intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_SHOW_SIGNATURE,
-                    sdkWrapperAction.showSignature
+                    ClearentSDKActivity.CLEARENT_SHOW_SIGNATURE,
+                    clearentAction.showSignature
                 )
                 // Set the payment method
                 intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_PAYMENT_METHOD,
-                    sdkWrapperAction.paymentMethod as? Parcelable
+                    ClearentSDKActivity.CLEARENT_PAYMENT_METHOD,
+                    clearentAction.paymentMethod as? Parcelable
                 )
             }
         }
@@ -138,6 +136,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        SDKWrapper.removeListener()
+        ClearentWrapper.removeListener()
     }
 }
