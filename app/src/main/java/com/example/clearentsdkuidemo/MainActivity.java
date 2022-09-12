@@ -12,10 +12,10 @@ import androidx.activity.result.contract.ActivityResultContracts.StartActivityFo
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.clearent.idtech.android.wrapper.ClearentDataSource;
-import com.clearent.idtech.android.wrapper.SDKWrapper;
-import com.clearent.idtech.android.wrapper.ui.ClearentSDKUi;
+import com.clearent.idtech.android.wrapper.ClearentWrapper;
+import com.clearent.idtech.android.wrapper.ui.ClearentSDKActivity;
 import com.clearent.idtech.android.wrapper.ui.PaymentMethod;
-import com.clearent.idtech.android.wrapper.ui.SDKWrapperAction;
+import com.clearent.idtech.android.wrapper.ui.ClearentAction;
 import com.example.clearentsdkuidemo.databinding.ActivityMainBinding;
 
 import java.util.Objects;
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
                         if (data == null)
                             return;
 
-                        Timber.d(String.valueOf(data.getIntExtra(ClearentSDKUi.SDK_WRAPPER_RESULT_CODE, 0)));
+                        Timber.d(String.valueOf(data.getIntExtra(ClearentSDKActivity.CLEARENT_RESULT_CODE, 0)));
                     }
                 }
             }
@@ -60,19 +60,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSdkListener() {
-        SDKWrapper.INSTANCE.setListener(ClearentDataSource.INSTANCE);
+        ClearentWrapper.INSTANCE.setListener(ClearentDataSource.INSTANCE);
     }
 
     private void setupClickListeners() {
         binding.pairReaderButton.setOnClickListener(
-                view -> startSdkActivityForResult(new SDKWrapperAction.Pairing())
+                view -> startSdkActivityForResult(new ClearentAction.Pairing())
         );
         binding.readersListButton.setOnClickListener(
-                view -> startSdkActivityForResult(new SDKWrapperAction.DevicesList())
+                view -> startSdkActivityForResult(new ClearentAction.DevicesList())
         );
         binding.startTransactionButton.setOnClickListener(
                 view -> startSdkActivityForResult(
-                        new SDKWrapperAction.Transaction(
+                        new ClearentAction.Transaction(
                                 Double.parseDouble(Objects.requireNonNull(binding.chargeAmountEditText.getText()).toString()),
                                 false,
                                 true,
@@ -82,66 +82,66 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void startSdkActivityForResult(SDKWrapperAction sdkWrapperAction) {
+    private void startSdkActivityForResult(ClearentAction clearentAction) {
         if (transactionOngoing)
             return;
 
         transactionOngoing = true;
 
-        // ↓ this could be a method inside the ClearentSDKUi
+        // ↓ this could be a method inside the ClearentSDKActivity
 
-        // Now we create an intent to start the ClearentSDKUi activity
-        final Intent intent = new Intent(this, ClearentSDKUi.class);
+        // Now we create an intent to start the ClearentSDKActivity activity
+        final Intent intent = new Intent(this, ClearentSDKActivity.class);
 
         // Pairing flow: we search for readers and then pair to one.
-        if (sdkWrapperAction instanceof SDKWrapperAction.Pairing) {
-            final SDKWrapperAction.Pairing action = (SDKWrapperAction.Pairing) sdkWrapperAction;
+        if (clearentAction instanceof ClearentAction.Pairing) {
+            final ClearentAction.Pairing action = (ClearentAction.Pairing) clearentAction;
             // Set the action for the ui
             intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_KEY,
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_PAIR
+                    ClearentSDKActivity.CLEARENT_ACTION_KEY,
+                    ClearentSDKActivity.CLEARENT_ACTION_PAIR
             );
             // Set the hints option
             intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_SHOW_HINTS,
+                    ClearentSDKActivity.CLEARENT_SHOW_HINTS,
                     action.getShowHints()
             );
         }
         // Devices List flow: we look at previously paired readers and select one to pair with.
         // We can also see some settings of the readers.
-        else if (sdkWrapperAction instanceof SDKWrapperAction.DevicesList)
+        else if (clearentAction instanceof ClearentAction.DevicesList)
             // Set the action for the ui
             intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_KEY,
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_DEVICES
+                    ClearentSDKActivity.CLEARENT_ACTION_KEY,
+                    ClearentSDKActivity.CLEARENT_ACTION_DEVICES
             );
             // Transaction Flow: we start a transaction with an amount on a reader, or by manually
             // entering the card details.
-        else if (sdkWrapperAction instanceof SDKWrapperAction.Transaction) {
-            final SDKWrapperAction.Transaction action = (SDKWrapperAction.Transaction) sdkWrapperAction;
+        else if (clearentAction instanceof ClearentAction.Transaction) {
+            final ClearentAction.Transaction action = (ClearentAction.Transaction) clearentAction;
             // Set the action for the ui
             intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_KEY,
-                    ClearentSDKUi.SDK_WRAPPER_ACTION_TRANSACTION
+                    ClearentSDKActivity.CLEARENT_ACTION_KEY,
+                    ClearentSDKActivity.CLEARENT_ACTION_TRANSACTION
             );
             // Set the amount for the transaction
             intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_AMOUNT_KEY,
+                    ClearentSDKActivity.CLEARENT_AMOUNT_KEY,
                     action.getAmount()
             );
             // Set the hints options in case we go through the pairing flow
             intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_SHOW_HINTS,
+                    ClearentSDKActivity.CLEARENT_SHOW_HINTS,
                     action.getShowHints()
             );
             // Set the signature option
             intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_SHOW_SIGNATURE,
+                    ClearentSDKActivity.CLEARENT_SHOW_SIGNATURE,
                     action.getShowSignature()
             );
             // Set the payment method
             intent.putExtra(
-                    ClearentSDKUi.SDK_WRAPPER_PAYMENT_METHOD,
+                    ClearentSDKActivity.CLEARENT_PAYMENT_METHOD,
                     (Parcelable) action.getPaymentMethod()
             );
         }
@@ -151,6 +151,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SDKWrapper.INSTANCE.removeListener();
+        ClearentWrapper.INSTANCE.removeListener();
     }
 }

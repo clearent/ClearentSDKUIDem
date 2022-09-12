@@ -20,6 +20,7 @@
         android:id="@+id/readers_list_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="Readers List"
         app:layout_constraintBottom_toTopOf="@+id/transaction"
         app:layout_constraintEnd_toEndOf="parent"

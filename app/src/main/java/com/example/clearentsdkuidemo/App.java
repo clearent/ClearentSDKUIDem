@@ -2,7 +2,7 @@ package com.example.clearentsdkuidemo;
 
 import android.app.Application;
 
-import com.clearent.idtech.android.wrapper.SDKWrapper;
+import com.clearent.idtech.android.wrapper.ClearentWrapper;
 
 public class App extends Application {
 
@@ -10,11 +10,11 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
 
-        initSdk();
+        initSdkWrapper();
     }
 
-    private void initSdk() {
-        SDKWrapper.INSTANCE.initializeReader(
+    private void initSdkWrapper() {
+        ClearentWrapper.INSTANCE.initializeSDK(
                 getApplicationContext(),
                 Constants.BASE_URL_SANDBOX,
                 Constants.PUBLIC_KEY_SANDBOX,
