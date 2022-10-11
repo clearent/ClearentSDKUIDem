@@ -200,10 +200,6 @@
         <item name="android:paddingBottom">@dimen/margin_small</item>
     </style>
 
-    <style name="RoundedConfirmButton" parent="ShapeAppearanceOverlay.Button.RoundedBlack">
-        <item name="android:backgroundTint">@color/button_confirm_selector</item>
-    </style>
-
     <style name="ButtonCancel" parent="@style/ShapeAppearanceOverlay.Button.RoundedWhite">
         <item name="android:text">@string/cancel</item>
     </style>
