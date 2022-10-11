@@ -18,7 +18,8 @@ public class App extends Application {
                 getApplicationContext(),
                 Constants.BASE_URL_SANDBOX,
                 Constants.PUBLIC_KEY_SANDBOX,
-                Constants.API_KEY_SANDBOX
+                Constants.API_KEY_SANDBOX,
+                true // should be true otherwise the ClearentSDKUI does not show any messages
         );
     }
 }
